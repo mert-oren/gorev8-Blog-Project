@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Login Page</title>
+
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body class="flex flex-col min-h-screen">
+    <header class="navbar flex justify-center bg-base-100 shadow-xl bg-black">
+        <a href="index.html" class="text-2xl text-white">Blog</a>
+    </header>
+
+    <main class="flex-1 flex justify-center items-center">
+
+        <div class="bg-gray-200 p-15 rounded shadow-xl">
+            <div class="flex flex-col justify-center items-center pb-4 gap-2">
+                <h1 class="font-bold text-2xl">Hosgeldiniz</h1>
+                <p class="opacity-70">Hemen ucretsiz hesabinizi olusturun.</p>
+            </div>
+
+            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 shadow-xl">
+
+                <label class="label">Eposta</label>
+                <input class="input rounded-box" type="email" placeholder="E-mail adresinizi girin" id="email">
+                <label for="">Sifre</label>
+                <input class="input rounded-box" type="password" placeholder="Sifrenizi girin" id="password">
+
+                <button class="btn btn-neutral my-4" onclick="login()">Giris Yap</button>
+                <p id="result" class="mt-2 text-sm text-green-600"></p>
+                <hr class="opacity-10">
+                <div class="flex gap-1 justify-center mt-2">
+                    <p>Hesabiniz yok mu?</p>
+                    <a href="register.html" class="text-blue-500 font-bold">Uye ol</a>
+                </div>
+            </fieldset>
+        </div>
+    </main>
+
+    <footer class="footer flex justify-center sm:footer-horizontal bg-neutral text-neutral-content items-center p-10">
+        <p>© Mert Ören 2026</p>
+    </footer>
+
+    <script>
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        const API_URL = "https://zafer.ngrok.io";
+        const ENDPOINT = "/auth/login";
+
+        function login() {
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                alert("Tum alanlari doldurun.");
+                return;
+            }
+
+            axios.post(`${API_URL}${ENDPOINT}`,
+                {
+                    email: email,
+                    password: password,
+                })
+
+                .then(function (res) {
+                    const token = res.data.token;
+                    const user = res.data.user;
+
+                    localStorage.setItem("token", token);
+                    localStorage.setItem("user", JSON.stringify(user));
+
+                    document.getElementById("result").innerText = "Giris Basarili!";
+                    setTimeout(() => {
+                        window.location.href = "article.html";
+                    }, 2000);
+                })
+        }
+
+    </script>
+</body>
+
+</html>
