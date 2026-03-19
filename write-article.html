@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Makale yaz</title>
 
     <!-- DaisyUI -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
@@ -15,36 +15,99 @@
 
 </head>
 
-<body>
-    <header>
-        <div>Logo</div>
-        <button>Yayinla</button>
+<body class="flex flex-col min-h-screen cursor-default">
+    <header class="navbar flex justify-center px-8 bg-base-100 shadow-xl bg-black">
+        <div class="min-w-180 flex justify-between items-center px-4">
+            <a href="index.html" class="text-2xl text-white">Blog</a>
+            <div class="flex items-center gap-4">
+                <p class="text-white" id="username">Username</p>
+                <button class="btn btn-natural" onclick="logout()">Cikis Yap</button>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <div>Makale Container
-            <h1>Yeni makale olustur</h1>
-            <div>Baslik Card
-                <label for="">Makale basligi</label>
-                <input type="text">
-                <label for="">Kategori</label>
-                <select name="" id="">
-                    <option value="">Kategori Secin</option>
-                    <option value="">Kategori 1</option>
-                    <option value="">Kategori 2</option>
-                    <option value="">Kategori 3</option>
+    <main class="flex-1 flex justify-center my-8">
+        <div class="flex flex-col gap-4 bg-gray-200 p-15 rounded shadow-xl min-w-120 items-center">
+            <h1 class="font-bold text-2xl">Yeni makale olustur</h1>
+            <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 min-w-full">
+                <label class="label">Makale Basligi</label>
+                <input type="text" class="w-full border-gray-200 py-3 px-4" placeholder="Baslik" id="titleInput">
+                <label class="label">Kategori</label>
+                <select class="w-full border-gray-200 py-2.5 px-4" id="categoryInput">
+                    <option selected disabled>Kategori Secin</option>
+                    <option>Teknoloji</option>
+                    <option>Spor</option>
+                    <option>Sanat</option>
                 </select>
             </div>
-            <div>Body Card
-                <label for="">Makalenizi yazin</label>
-                <textarea name="" id=""></textarea>
+            <div class="min-w-full">
+                <textarea class="textarea w-full h-90 py-4" placeholder="Makalenizi yazin..."
+                    id="articleInput"></textarea>
+            </div>
+
+            <div
+                class="flex flex-col justify-center items-center bg-base-200 border-base-300 rounded-box w-xs border p-4 min-w-full">
+                <button class="btn bg-green-700 text-white border-none my-4 min-w-full"
+                    onclick="publish()">Yayinla</button>
+                <p id="resultPositive" class="text-green-800"></p>
+                <p id="resultNegative" class="text-red-800"></p>
             </div>
         </div>
     </main>
 
-    <footer>
-        <p>copyright</p>
+    <footer class="footer flex justify-center sm:footer-horizontal bg-neutral text-neutral-content items-center p-4">
+        <p>© Mert Ören 2026</p>
     </footer>
+
+    <script>
+        const API_URL = "";
+        const ENDPOINT = "";
+
+        const titleInput = document.getElementById("titleInput");
+        const categoryInput = document.getElementById("categoryInput");
+        const articleInput = document.getElementById("articleInput");
+
+        function publish() {
+
+            const title = titleInput.value.trim();
+            const category = categoryInput.value;
+            const article = articleInput.value;
+            const token = localStorage.getItem("token");
+
+            if (!title || category === "Kategori Secin" || !article) {
+                document.getElementById("resultNegative").innerText = "Lutfen tum alanlari doldurun."
+                return;
+            }
+
+            axios.post(`${API_URL}${ENDPOINT}`,
+                {
+                    title: title,
+                    category: category,
+                    body: article,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+
+                    .then(function (res) {
+                        document.getElementById("resultPositive").innerText = "Giris basarili. Ana sayfaya yonlendiriliyorsunuz"
+
+                        setTimeout(() => {
+                            window.location.href = "article.html"
+                        }, 2000);
+                    })
+            )
+
+        }
+
+        function logout() {
+
+        }
+
+
+    </script>
 </body>
 
 </html>
