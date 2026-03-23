@@ -1,0 +1,30 @@
+[
+  {
+    "title": "JavaScript'e Giris",
+    "body": "JavaScript, web sayfalarina hareket ve etkilesim kazandiran bir programlama dilidir.",
+    "author": {
+      "username": "mertoren"
+    }
+  },
+  {
+    "title": "Axios Nedir?",
+    "body": "Axios, API'lere istek atmak icin kullanilan populer bir JavaScript kutuphanesidir.",
+    "author": {
+      "username": "frontendci"
+    }
+  },
+  {
+    "title": "HTML ve CSS Temelleri",
+    "body": "HTML sayfanin iskeletini, CSS ise gorunumunu olusturur.",
+    "author": {
+      "username": "kodsever"
+    }
+  },
+  {
+    "title": "Responsive Tasarim",
+    "body": "Responsive tasarim, sitenin telefon, tablet ve bilgisayarda duzgun gorunmesini saglar.",
+    "author": {
+      "username": "uiustasi"
+    }
+  }
+]

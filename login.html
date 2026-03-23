@@ -16,28 +16,36 @@
 </head>
 
 <body class="flex flex-col min-h-screen">
+    <!-- Header -->
     <header class="navbar flex justify-center bg-base-100 shadow-xl bg-black">
+        <!-- Logo - Ana Sayfa Linki -->
         <a href="index.html" class="text-2xl text-white">Blog</a>
     </header>
 
+    <!-- Login Container -->
     <main class="flex-1 flex justify-center items-center">
-
+        <!-- Container Header -->
         <div class="bg-gray-200 p-15 rounded shadow-xl">
             <div class="flex flex-col justify-center items-center pb-4 gap-2">
                 <h1 class="font-bold text-2xl">Hosgeldiniz</h1>
                 <p class="opacity-70">Hemen ucretsiz hesabinizi olusturun.</p>
             </div>
 
+            <!-- Login Fieldset -->
             <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 shadow-xl">
 
+                <!-- Email -->
                 <label class="label">Eposta</label>
                 <input class="input rounded-box" type="email" placeholder="E-mail adresinizi girin" id="email">
+                <!-- Sifre -->
                 <label for="">Sifre</label>
                 <input class="input rounded-box" type="password" placeholder="Sifrenizi girin" id="password">
-
+                <!-- Button -->
                 <button class="btn btn-neutral my-4" onclick="login()">Giris Yap</button>
-                <p id="result" class="mt-2 text-sm text-green-600"></p>
+                <!-- Onclick Result -->
+                <div id="result" class="text-center"></div>
                 <hr class="opacity-10">
+                <!-- Redirect Register -->
                 <div class="flex gap-1 justify-center mt-2">
                     <p>Hesabiniz yok mu?</p>
                     <a href="register.html" class="text-blue-500 font-bold">Uye ol</a>
@@ -46,45 +54,65 @@
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="footer flex justify-center sm:footer-horizontal bg-neutral text-neutral-content items-center p-10">
         <p>© Mert Ören 2026</p>
     </footer>
 
     <script>
+        // Elementleri cek
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
-        const API_URL = "https://zafer.ngrok.io";
+        const API_URL = "http://r8080soc8sos40wk4c40s0w4.91.98.145.144.sslip.io/";
         const ENDPOINT = "/auth/login";
 
+        // Login fonksiyonu
         function login() {
 
+            // Degerleri cek
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
+            // Degerleri kontrol et
             if (!email || !password) {
-                alert("Tum alanlari doldurun.");
+                //Hata mesaji yazdir
+                document.getElementById("result").innerHTML = `<p class="mt-2 text-sm text-red-600">Tum alanlari doldurun</p>`;
                 return;
             }
 
+            //API'ye login istegi gonder
             axios.post(`${API_URL}${ENDPOINT}`,
                 {
+                    //Inputtan alinan email bilgisini body icine gonder
                     email: email,
+                    //Inputtan alinan sifre bilgisini body icine gonder
                     password: password,
                 })
-
+                //Sunucudan basarili cevap gelirse bu kismi calistir
                 .then(function (res) {
+                    //Response icindeki token bilgisini al
                     const token = res.data.token;
+                    //Response icindeki kullanici bilgilerini al
                     const user = res.data.user;
 
+                    //Token bilgisini Localstorage a kaydet
                     localStorage.setItem("token", token);
+                    //Kullanici bilgilerini stringe cevir ve Localstorage a kaydet
                     localStorage.setItem("user", JSON.stringify(user));
 
-                    document.getElementById("result").innerText = "Giris Basarili!";
+                    //Kullaniciya basarili giris mesajini ekranda goster
+                    document.getElementById("result").innerHTML = `<p class="mt-2 text-sm text-green-600">Giris Basarili. Ana sayfaya yonlendiriliyorsunuz.</p>`;
+                    //2 Saniye bekle ve kullaniciyi ana icerik sayfasina yonlendir
                     setTimeout(() => {
                         window.location.href = "article.html";
                     }, 2000);
 
+                })
+                // Sunucudan hata donerse veya istek basarisiz olursa bu kisim calisir
+                .catch(function (err) {
+                    // Kullaniciya hata mesajini ekranda goster
+                    document.getElementById("result").innerHTML = `<p class="mt-2 text-sm text-red-600">Giris basarisiz. Bilgilerinizi kontrol edin.</p>`;
                 })
         }
 

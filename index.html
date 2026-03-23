@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Blog Ana Sayfa</title>
 
     <!-- DaisyUI -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
@@ -15,29 +15,71 @@
 
 </head>
 
-<body>
-    <header>
-        <div>Logo</div>
-        <div>
-            <button>Articles</button>
-            <button>Login</button>
-            <button>Register</button>
+<body class="flex flex-col min-h-screen">
+    <header class="navbar flex justify-between px-8 bg-base-100 shadow-xl bg-black">
+        <a href="index.html" class="text-2xl text-white">Blog</a>
+        <div class="flex gap-4">
+            <button class="btn btn-natural"><a href="login.html">Login</a></button>
+            <button class="btn btn-natural"><a href="register.html">Register</a></button>
         </div>
     </header>
 
-    <main>
-        <h1>Dusuncelerin Dunyasi</h1>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rem, corrupti.</p>
+    <main class="flex-1 flex flex-col items-center py-4 gap-4">
+        <h1 class="font-bold text-4xl">Dusuncelerin Dunyasi</h1>
+        <p class="text-center">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rem, corrupti.</p>
 
-        <div>Makaleler buraya gelecek
-            <div>Makale karti burada olacak</div>
+        <div id="articles"
+            class="mx-auto grid max-w-7xl grid-cols-1 gap-6 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         </div>
 
     </main>
 
-    <footer>
-        <p>copyright</p>
+    <footer class="footer flex justify-center sm:footer-horizontal bg-neutral text-neutral-content items-center p-10">
+        <p>© Mert Ören 2026</p>
     </footer>
 </body>
+
+<script>
+
+    //Makalelerin gosterilecegi alan
+    const articles = document.getElementById("articles");
+    //Gercek API bilgileri
+    const API_URL = "http://r8080soc8sos40wk4c40s0w4.91.98.145.144.sslip.io/";
+    const ENDPOINT = "/posts";
+
+    //Makaleleri getir ve ekrana bas
+    function getArticles() {
+
+        //axios.get(`${API_URL}${ENDPOINT}`)
+
+        //Simdilik local json ile test
+        axios.get("./articles.json")
+            .then(function (res) {
+                //gelen makale dizisi
+                const article = res.data;
+                //her makale icin card olustur
+                //en sonunda tum kartlari .join("") ile tek bir metin haline getir
+                const html = article.map(v => `
+            <div class='card bg-base-200'>
+                <div class='card-body'>
+                    <div class='card-title'>${v.title}</div>
+                    <p>${v.body}</p>
+                    <div class='card-actions flex-col'>
+                        <p>Yazar: ${v.author.username}</p>
+                        <div class='badge badge-soft badge-primary'>Kategori</div>
+                    </div>
+                </div>
+            </div>
+            `).join("");
+
+                //Olusturulan kartlari sayfaya yerlestir
+                articles.innerHTML = html;
+            })
+    }
+
+    //Makaleleri cek
+    getArticles();
+
+</script>
 
 </html>

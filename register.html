@@ -16,30 +16,39 @@
 </head>
 
 <body class="flex flex-col min-h-screen">
+    <!-- Header - Navbar -->
     <header class="navbar flex justify-center bg-base-100 shadow-xl bg-black">
+        <!-- Logo - Ana sayfa linki -->
         <a href="index.html" class="text-2xl text-white">Blog</a>
     </header>
 
     <main class="flex-1 flex justify-center items-center">
-
+        <!-- Register Container -->
         <div class="bg-gray-200 p-15 rounded shadow-xl">
+            <!-- Register Header -->
             <div class="flex flex-col justify-center items-center pb-4 gap-2">
                 <h1 class="font-bold text-2xl">Aramiza Katilin</h1>
                 <p class="opacity-70">Lutfen bilgilerinizi girerek oturum acin.</p>
             </div>
-            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
 
+            <!-- Register Fieldset -->
+            <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                <!-- Username -->
                 <label class="label">Kullanici Adi</label>
                 <input class="input rounded-box" type="text" placeholder="Kullanici adinizi girin" id="username">
+                <!-- Email -->
                 <label class="label">E-posta</label>
                 <input type="email" placeholder="E-mail adresinizi girin" class="input rounded-box" id="email">
+                <!-- Sifre -->
                 <label class="label">Sifre</label>
                 <input type="password" placeholder="Sifrenizi girin" class="input rounded-box" id="password">
-
+                <!-- Button -->
                 <button class="btn btn-neutral my-4" onclick="register()">Kayit ol</button>
 
-                <p id="result" class="mt-2 text-sm text-green-600"></p>
+                <!-- Onclick Result -->
+                <div id="result" class="text-center"></div>
                 <hr class="opacity-10">
+                <!-- Redirect Login -->
                 <div class="flex gap-1 justify-center mt-2">
                     <p>Zaten uye misiniz?</p>
                     <a href="login.html" class="text-blue-500 font-bold">Giris yap</a>
@@ -47,7 +56,7 @@
             </fieldset>
         </div>
     </main>
-
+    <!-- Footer -->
     <footer class="footer flex justify-center sm:footer-horizontal bg-neutral text-neutral-content items-center p-10">
         <p>© Mert Ören 2026</p>
     </footer>
@@ -55,42 +64,64 @@
 
     <script>
 
+        // Inputlari cek
         const usernameInput = document.getElementById("username");
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
-        const API_URL = "https://zafer.ngrok.io";
+        //API + Endpoint tanimla
+        const API_URL = "http://r8080soc8sos40wk4c40s0w4.91.98.145.144.sslip.io/";
         const ENDPOINT = "/auth/register";
 
+        //Register Onclick Fonksiyonu
         function register() {
 
+            //Inputlardan degerleri cek
             const username = usernameInput.value.trim();
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
+            //Tum alanlarin bir degeri var mi kontrol et
             if (!username || !email || !password) {
-                alert("Tum alanlari doldurun.");
+                //Hata mesaji yazdir
+                document.getElementById("result").innerHTML = `<p class="mt-2 text-sm text-red-600">Tum alanlari doldurun</p>`;
                 return;
             }
 
+            //API'ye register istegi gonder
             axios.post(`${API_URL}${ENDPOINT}`,
                 {
+                    //Inputtan alinan username bilgisini body icine gonder
                     username: username,
+                    //Inputtan alinan email bilgisini body icine gonder
                     email: email,
+                    //Inputtan alinan sifre bilgisini body icine gonder
                     password: password,
                 })
 
+                //Sunucudan basarili cevap gelirse .then i calistir
                 .then(function (res) {
+                    //gelen cevaptaki token bilgisini al
                     const token = res.data.token;
+                    //gelen cevaptaki kullanici bilgilerini al
                     const user = res.data.user;
 
+                    //Token bilgisini Localstorage'a kaydet
                     localStorage.setItem("token", token);
+                    //Kullanici bilgilerini stringe cevir ve Localstorage'a kaydet
                     localStorage.setItem("user", JSON.stringify(user));
 
-                    document.getElementById("result").innerText = "Kayit Basarili!";
+                    //Kullaniciya basarili kayit bilgisini ver
+                    document.getElementById("result").innerHTML = `<p class="mt-2 text-sm text-green-600">Kayit Basarili. Ana sayfaya yonlendiriliyorsunuz.</p>`;
+                    //2 Saniye bekleyip kullaniciyi ana icerik sayfasina yonlendir
                     setTimeout(() => {
                         window.location.href = "article.html";
                     }, 2000);
+                })
+                //Sunucudan gelen cevap basarisiz ise .catch calistir
+                .catch(function (err) {
+                    //Kullaniciya hatali giris mesaji ver
+                    document.getElementById("result").innerHTML = `<p class="mt-2 text-sm text-red-600">Kayit Basarisiz. <br> Bu kullanici adi ya da E-posta zaten kayitli</p>`;
                 })
         }
 

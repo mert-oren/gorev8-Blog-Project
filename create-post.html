@@ -103,7 +103,12 @@
         }
 
         function logout() {
+            //Kayitli kullanici bilgilerini sil
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
 
+            //kullaniciyi register ekranina yonlendir
+            window.location.href = "register.html";
         }
 
 
