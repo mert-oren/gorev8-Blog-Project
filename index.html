@@ -50,10 +50,10 @@
     //Makaleleri getir ve ekrana bas
     function getArticles() {
 
-        //axios.get(`${API_URL}${ENDPOINT}`)
+        axios.get(`${API_URL}${ENDPOINT}`)
 
-        //Simdilik local json ile test
-        axios.get("./articles.json")
+            //Simdilik local json ile test
+            // axios.get("./articles.json")
             .then(function (res) {
                 //gelen makale dizisi
                 const article = res.data;
