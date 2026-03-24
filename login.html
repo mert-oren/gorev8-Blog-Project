@@ -64,7 +64,7 @@
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
-        const API_URL = "http://r8080soc8sos40wk4c40s0w4.91.98.145.144.sslip.io/";
+        const API_URL = "https://api.zaferayan.com";
         const ENDPOINT = "/auth/login";
 
         // Login fonksiyonu
@@ -104,9 +104,9 @@
                     //Kullaniciya basarili giris mesajini ekranda goster
                     document.getElementById("result").innerHTML = `<p class="mt-2 text-sm text-green-600">Giris Basarili. Ana sayfaya yonlendiriliyorsunuz.</p>`;
                     //2 Saniye bekle ve kullaniciyi ana icerik sayfasina yonlendir
-                    setTimeout(() => {
-                        window.location.href = "article.html";
-                    }, 2000);
+                    // setTimeout(() => {
+                    //     window.location.href = "article.html";
+                    // }, 2000);
 
                 })
                 // Sunucudan hata donerse veya istek basarisiz olursa bu kisim calisir
