@@ -35,9 +35,9 @@
                 <label class="label">Kategori</label>
                 <select class="w-full border-gray-200 py-2.5 px-4" id="categoryInput">
                     <option selected disabled>Kategori Secin</option>
-                    <option>Teknoloji</option>
-                    <option>Spor</option>
-                    <option>Sanat</option>
+                    <option>Frontend</option>
+                    <option>Backend</option>
+                    <option>DevOps</option>
                 </select>
             </div>
             <div class="min-w-full">
@@ -74,6 +74,10 @@
             const article = articleInput.value;
             const token = localStorage.getItem("token");
 
+            if (!token) {
+                window.location.href = "login.html";
+            }
+
             if (!title || category === "Kategori Secin" || !article) {
                 document.getElementById("resultNegative").innerText = "Lutfen tum alanlari doldurun."
                 return;
@@ -90,16 +94,14 @@
                         Authorization: `Bearer ${token}`,
                     },
                 }
-
-                    .then(function (res) {
-                        document.getElementById("resultPositive").innerText = "Giris basarili. Ana sayfaya yonlendiriliyorsunuz";
-
-                        setTimeout(() => {
-                            window.location.href = "article.html";
-                        }, 2000);
-                    })
-
             )
+                .then(function (res) {
+                    document.getElementById("resultPositive").innerText = "Makale basariyla eklendi. Makaleler sayfasina yonlendiriliyorsunuz.";
+
+                    setTimeout(() => {
+                        window.location.href = "articles.html";
+                    }, 2000);
+                })
 
         }
 
@@ -109,7 +111,7 @@
             localStorage.removeItem("user");
 
             //kullaniciyi register ekranina yonlendir
-            window.location.href = "register.html";
+            window.location.href = "login.html";
         }
 
 

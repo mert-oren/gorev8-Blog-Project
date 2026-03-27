@@ -15,12 +15,13 @@
 
 </head>
 
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen cursor-default">
     <header class="navbar flex justify-between px-8 bg-base-100 shadow-xl bg-black">
-        <a href="index.html" class="text-2xl text-white">Blog</a>
-        <div class="flex gap-4">
-            <button class="btn btn-natural"><a href="login.html">Login</a></button>
-            <button class="btn btn-natural"><a href="register.html">Register</a></button>
+        <a href="article.html" class="text-2xl text-white">Blog</a>
+        <div class="flex items-center gap-4">
+            <span class="text-white">Username</span>
+            <button class="btn btn-soft btn-success"><a href="create-post.html">Makale Olustur</a></button>
+            <button class="btn btn-soft btn-error" onclick="logout()">Cikis yap</button>
         </div>
     </header>
 
@@ -44,7 +45,7 @@
     //Makalelerin gosterilecegi alan
     const articles = document.getElementById("articles");
     //Gercek API bilgileri
-    const API_URL = "https://api.zaferayan.com";
+    const API_URL = "https://api.zaferayan.com/";
     const ENDPOINT = "/posts";
 
     //Makaleleri getir ve ekrana bas
@@ -52,7 +53,7 @@
 
         axios.get(`${API_URL}${ENDPOINT}`)
 
-            //Simdilik local json ile test
+            // //Simdilik local json ile test
             // axios.get("./articles.json")
             .then(function (res) {
                 //gelen makale dizisi
@@ -60,16 +61,16 @@
                 //her makale icin card olustur
                 //en sonunda tum kartlari .join("") ile tek bir metin haline getir
                 const html = article.map(v => `
-            <div class='card bg-base-200'>
-                <div class='card-body'>
-                    <div class='card-title'>${v.title}</div>
-                    <p>${v.body}</p>
-                    <div class='card-actions flex-col'>
-                        <p>Yazar: ${v.author.username}</p>
-                        <div class='badge badge-soft badge-primary'>Kategori</div>
+                <div class='card bg-base-200'>
+                    <div class='card-body'>
+                        <div class='card-title'>${v.title}</div>
+                        <p>${v.body}</p>
+                        <div class='card-actions flex-col'>
+                            <p>Yazar: ${v.author.username}</p>
+                            <div class='badge badge-soft badge-primary'>${v.category}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
             `).join("");
 
                 //Olusturulan kartlari sayfaya yerlestir
@@ -77,6 +78,15 @@
             })
     }
 
+    //Logout fonksiyonu
+    function logout() {
+        //Kayitli kullanici bilgilerini sil
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        //kullaniciyi register ekranina yonlendir
+        window.location.href = "login.html";
+    }
     //Makaleleri cek
     getArticles();
 
