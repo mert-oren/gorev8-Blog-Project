@@ -41,6 +41,20 @@
 </body>
 
 <script>
+
+    const token = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
+
+    if (!token) {
+        window.location.href = "login.html";
+    }
+
+    if (savedUser) {
+        const user = JSON.parse(savedUser);
+        navUsername.innerText = user.username;
+    }
+
+
     //Kullanici adi
     const navUsername = document.getElementById("navUsername");
     //Makalelerin gosterilecegi alan
@@ -50,13 +64,7 @@
     const API_URL = "https://api.zaferayan.com";
     const ENDPOINT = "/posts";
 
-    const savedUser = localStorage.getItem("user");
 
-
-    if (savedUser) {
-        const user = JSON.parse(savedUser);
-        navUsername.innerText = user.username;
-    }
 
 
     //Makaleleri getir ve ekrana bas
