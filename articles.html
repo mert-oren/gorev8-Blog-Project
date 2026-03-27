@@ -86,11 +86,7 @@
                 //Olusturulan kartlari sayfaya yerlestir
                 articles.innerHTML = html;
             })
-            .catch((err) => {
-                console.log("Hata objesi:", err);
-                console.log("Status:", err.response?.status);
-                console.log("Response data:", err.response?.data);
-                console.log("Message:", err.message);
+            .catch(() => {
                 alert("Makaleler goruntulenemedi.");
             })
     }
