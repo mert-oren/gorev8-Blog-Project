@@ -18,7 +18,7 @@
 <body class="flex flex-col min-h-screen cursor-default">
     <header class="navbar flex justify-center px-8 bg-base-100 shadow-xl bg-black">
         <div class="min-w-180 flex justify-between items-center px-4">
-            <a href="index.html" class="text-2xl text-white">Blog</a>
+            <a href="articles.html" class="text-2xl text-white">Blog</a>
             <div class="flex items-center gap-4">
                 <p class="text-white" id="username">Username</p>
                 <button class="btn btn-natural" onclick="logout()">Cikis Yap</button>
@@ -60,6 +60,22 @@
     </footer>
 
     <script>
+
+
+        const token = localStorage.getItem("token");
+        const savedUser = localStorage.getItem("user");
+
+        if (!token) {
+            window.location.href = "login.html";
+        }
+
+        const usernameElement = document.getElementById("username");
+
+        if (savedUser) {
+            const user = JSON.parse(savedUser);
+            usernameElement.innerText = user.username;
+        }
+
         const API_URL = "https://api.zaferayan.com";
         const ENDPOINT = "/posts";
 
@@ -67,41 +83,41 @@
         const categoryInput = document.getElementById("categoryInput");
         const articleInput = document.getElementById("articleInput");
 
+        const resultPositive = document.getElementById("resultPositive");
+        const resultNegative = document.getElementById("resultNegative");
+
         function publish() {
 
             const title = titleInput.value.trim();
             const category = categoryInput.value;
-            const article = articleInput.value;
-            const token = localStorage.getItem("token");
+            const body = articleInput.value.trim();
 
-            if (!token) {
-                window.location.href = "login.html";
-            }
 
-            if (!title || category === "Kategori Secin" || !article) {
+            if (!title || !category || category === "Kategori Secin" || !body) {
                 document.getElementById("resultNegative").innerText = "Lutfen tum alanlari doldurun."
                 return;
             }
 
-            axios.post(`${API_URL}${ENDPOINT}`,
-                {
-                    title: title,
-                    category: category,
-                    body: article,
-                },
+            axios.post(
+                `${API_URL}${ENDPOINT}`,
+                { title, category, body },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
             )
-                .then(function (res) {
-                    document.getElementById("resultPositive").innerText = "Makale basariyla eklendi. Makaleler sayfasina yonlendiriliyorsunuz.";
+                .then(() => {
+                    resultNegative.innerText = "";
+                    resultPositive.innerText = "Makale basariyla eklendi. Makaleler sayfasina yonlendiriliyorsunuz.";
 
                     setTimeout(() => {
                         window.location.href = "articles.html";
                     }, 2000);
                 })
+                .catch(() => {
+                    resultNegative.innerText = "Makale eklenemedi. Token veya sunucu hatasi olabilir.";
+                });
 
         }
 

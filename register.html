@@ -19,7 +19,7 @@
     <!-- Header - Navbar -->
     <header class="navbar flex justify-center bg-base-100 shadow-xl bg-black">
         <!-- Logo - Ana sayfa linki -->
-        <a href="index.html" class="text-2xl text-white">Blog</a>
+        <a href="articles.html" class="text-2xl text-white">Blog</a>
     </header>
 
     <main class="flex-1 flex justify-center items-center">
@@ -88,23 +88,13 @@
                 return;
             }
 
-            //API'ye register istegi gonder
-            axios.post(`${API_URL}${ENDPOINT}`,
-                {
-                    //Inputtan alinan username bilgisini body icine gonder
-                    username: username,
-                    //Inputtan alinan email bilgisini body icine gonder
-                    email: email,
-                    //Inputtan alinan sifre bilgisini body icine gonder
-                    password: password,
-                })
+            //API'ye register istegi gonder ve inputtan alinan username-email-password bilgisini body icine gonder
+            axios.post(`${API_URL}${ENDPOINT}`, { username, email, password })
 
                 //Sunucudan basarili cevap gelirse .then i calistir
-                .then(function (res) {
-                    //gelen cevaptaki token bilgisini al
-                    const token = res.data.token;
-                    //gelen cevaptaki kullanici bilgilerini al
-                    const user = res.data.user;
+                .then(({ data }) => {
+                    //gelen cevaptaki token ve kullanici bilgilerini al
+                    const { token, user } = data;
 
                     //Token bilgisini Localstorage'a kaydet
                     localStorage.setItem("token", token);

@@ -17,17 +17,17 @@
 
 <body class="flex flex-col min-h-screen cursor-default">
     <header class="navbar flex justify-between px-8 bg-base-100 shadow-xl bg-black">
-        <a href="article.html" class="text-2xl text-white">Blog</a>
+        <a href="articles.html" class="text-2xl text-white">Blog</a>
         <div class="flex items-center gap-4">
-            <span class="text-white">Username</span>
-            <button class="btn btn-soft btn-success"><a href="create-post.html">Makale Olustur</a></button>
+            <span class="text-white" id="navUsername"></span>
+            <a href="create-post.html" class="btn btn-soft btn-success">Makale Olustur</a>
             <button class="btn btn-soft btn-error" onclick="logout()">Cikis yap</button>
         </div>
     </header>
 
     <main class="flex-1 flex flex-col items-center py-4 gap-4">
         <h1 class="font-bold text-4xl">Dusuncelerin Dunyasi</h1>
-        <p class="text-center">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rem, corrupti.</p>
+        <p class="text-center">Dunyanin en harika makalelerinin yayinlandigi bu platforma hosgeldiniz!</p>
 
         <div id="articles"
             class="mx-auto grid max-w-7xl grid-cols-1 gap-6 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -41,33 +41,43 @@
 </body>
 
 <script>
-
+    //Kullanici adi
+    const navUsername = document.getElementById("navUsername");
     //Makalelerin gosterilecegi alan
     const articles = document.getElementById("articles");
+
     //Gercek API bilgileri
-    const API_URL = "https://api.zaferayan.com/";
+    const API_URL = "https://api.zaferayan.com";
     const ENDPOINT = "/posts";
+
+    const savedUser = localStorage.getItem("user");
+
+
+    if (savedUser) {
+        const user = JSON.parse(savedUser);
+        navUsername.innerText = user.username;
+    }
+
 
     //Makaleleri getir ve ekrana bas
     function getArticles() {
 
+        // //Simdilik local json ile test
+        // axios.get("./articles.json")
+
         axios.get(`${API_URL}${ENDPOINT}`)
 
-            // //Simdilik local json ile test
-            // axios.get("./articles.json")
-            .then(function (res) {
-                //gelen makale dizisi
-                const article = res.data;
+            .then(({ data: articlesData }) => {
                 //her makale icin card olustur
                 //en sonunda tum kartlari .join("") ile tek bir metin haline getir
-                const html = article.map(v => `
+                const html = articlesData.map(({ title, body, author, category }) => `
                 <div class='card bg-base-200'>
                     <div class='card-body'>
-                        <div class='card-title'>${v.title}</div>
-                        <p>${v.body}</p>
+                        <div class='card-title'>${title}</div>
+                        <p>${body}</p>
                         <div class='card-actions flex-col'>
-                            <p>Yazar: ${v.author.username}</p>
-                            <div class='badge badge-soft badge-primary'>${v.category}</div>
+                            <p>Yazar: ${author?.username || "Bilinmiyor"}</p>
+                            <div class='badge badge-soft badge-primary'>${category}</div>
                         </div>
                     </div>
                 </div>
@@ -76,15 +86,18 @@
                 //Olusturulan kartlari sayfaya yerlestir
                 articles.innerHTML = html;
             })
+            .catch((err) => {
+                console.log("Hata objesi:", err);
+                console.log("Status:", err.response?.status);
+                console.log("Response data:", err.response?.data);
+                console.log("Message:", err.message);
+                alert("Makaleler goruntulenemedi.");
+            })
     }
 
     //Logout fonksiyonu
     function logout() {
-        //Kayitli kullanici bilgilerini sil
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-
-        //kullaniciyi register ekranina yonlendir
+        localStorage.clear();
         window.location.href = "login.html";
     }
     //Makaleleri cek
