@@ -42,6 +42,11 @@
 
 <script>
 
+
+    //Gercek API bilgileri
+    const API_URL = "https://api.zaferayan.com";
+    const ENDPOINT = "/posts";
+
     //Kullanici adi
     const navUsername = document.getElementById("navUsername");
     //Makalelerin gosterilecegi alan
@@ -59,14 +64,6 @@
         }
         getArticles();
     }
-
-
-
-    //Gercek API bilgileri
-    const API_URL = "https://api.zaferayan.com";
-    const ENDPOINT = "/posts";
-
-
 
 
     //Makaleleri getir ve ekrana bas
