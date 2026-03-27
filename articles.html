@@ -52,13 +52,15 @@
 
     if (!token) {
         window.location.href = "login.html";
-        return;
+    } else {
+        if (savedUser) {
+            const user = JSON.parse(savedUser);
+            navUsername.innerText = user.username;
+        }
+        getArticles();
     }
 
-    if (savedUser) {
-        const user = JSON.parse(savedUser);
-        navUsername.innerText = user.username;
-    }
+
 
     //Gercek API bilgileri
     const API_URL = "https://api.zaferayan.com";
@@ -104,8 +106,6 @@
         localStorage.clear();
         window.location.href = "login.html";
     }
-    //Makaleleri cek
-    getArticles();
 
 </script>
 
