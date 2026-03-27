@@ -42,23 +42,23 @@
 
 <script>
 
+    //Kullanici adi
+    const navUsername = document.getElementById("navUsername");
+    //Makalelerin gosterilecegi alan
+    const articles = document.getElementById("articles");
+
     const token = localStorage.getItem("token");
     const savedUser = localStorage.getItem("user");
 
     if (!token) {
         window.location.href = "login.html";
+        return;
     }
 
     if (savedUser) {
         const user = JSON.parse(savedUser);
         navUsername.innerText = user.username;
     }
-
-
-    //Kullanici adi
-    const navUsername = document.getElementById("navUsername");
-    //Makalelerin gosterilecegi alan
-    const articles = document.getElementById("articles");
 
     //Gercek API bilgileri
     const API_URL = "https://api.zaferayan.com";
